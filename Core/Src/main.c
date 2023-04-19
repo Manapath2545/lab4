@@ -120,12 +120,12 @@ int main(void)
 			  Final_degree = (Degree_motor/3071.0)*360;
 			  Vfeedback = arm_pid_f32(&PID, Set_degree - Final_degree);
 			  if(Vfeedback >0){
-				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Vfeedback*3);
+				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Vfeedback*15);
 				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,0);
 			  }
 			  else if (Vfeedback<0)
 			  {
-				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,abs(Vfeedback)*3);
+				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,abs(Vfeedback)*15);
 				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,0);
 			  }
 			  else

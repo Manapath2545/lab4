@@ -1184,13 +1184,13 @@ int main(void)
  8000dee:	f9b3 3000 	ldrsh.w	r3, [r3]
  8000df2:	2b00      	cmp	r3, #0
  8000df4:	dd0e      	ble.n	8000e14 <main+0x15c>
-				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Vfeedback*3);
+				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Vfeedback*15);
  8000df6:	4b22      	ldr	r3, [pc, #136]	; (8000e80 <main+0x1c8>)
  8000df8:	f9b3 3000 	ldrsh.w	r3, [r3]
  8000dfc:	461a      	mov	r2, r3
  8000dfe:	4613      	mov	r3, r2
- 8000e00:	005b      	lsls	r3, r3, #1
- 8000e02:	441a      	add	r2, r3
+ 8000e00:	011b      	lsls	r3, r3, #4
+ 8000e02:	1a9a      	subs	r2, r3, r2
  8000e04:	4b18      	ldr	r3, [pc, #96]	; (8000e68 <main+0x1b0>)
  8000e06:	681b      	ldr	r3, [r3, #0]
  8000e08:	635a      	str	r2, [r3, #52]	; 0x34
@@ -1207,7 +1207,7 @@ int main(void)
  8000e1a:	2b00      	cmp	r3, #0
  8000e1c:	da12      	bge.n	8000e44 <main+0x18c>
 			  {
-				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,abs(Vfeedback)*3);
+				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,abs(Vfeedback)*15);
  8000e1e:	4b18      	ldr	r3, [pc, #96]	; (8000e80 <main+0x1c8>)
  8000e20:	f9b3 3000 	ldrsh.w	r3, [r3]
  8000e24:	2b00      	cmp	r3, #0
@@ -1216,8 +1216,8 @@ int main(void)
  8000e2a:	b29b      	uxth	r3, r3
  8000e2c:	461a      	mov	r2, r3
  8000e2e:	4613      	mov	r3, r2
- 8000e30:	005b      	lsls	r3, r3, #1
- 8000e32:	441a      	add	r2, r3
+ 8000e30:	011b      	lsls	r3, r3, #4
+ 8000e32:	1a9a      	subs	r2, r3, r2
  8000e34:	4b0c      	ldr	r3, [pc, #48]	; (8000e68 <main+0x1b0>)
  8000e36:	681b      	ldr	r3, [r3, #0]
  8000e38:	639a      	str	r2, [r3, #56]	; 0x38
