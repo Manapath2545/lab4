@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "arm_math.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,7 +43,13 @@ TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
+uint32_t Degree_motor;
+uint16_t Final_degree;
 
+int16_t Vfeedback;
+uint16_t Set_degree;
+
+arm_pid_instance_f32 PID = {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -91,13 +97,43 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  PID.Kp = 1;
+  PID.Ki = 0;
+  arm_pid_init_f32(&PID,0);
+  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_1|TIM_CHANNEL_2);
 
+  HAL_TIM_Base_Start(&htim1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  static uint32_t timestamp =0;
+
+	  	  if(HAL_GetTick()>timestamp)
+	  	  {
+	  		  timestamp = HAL_GetTick() +10;
+			  Degree_motor = __HAL_TIM_GET_COUNTER(&htim2);
+			  Final_degree = (Degree_motor/3071.0)*360;
+			  Vfeedback = arm_pid_f32(&PID, Set_degree - Final_degree);
+			  if(Vfeedback >0){
+				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Vfeedback*3);
+				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,0);
+			  }
+			  else if (Vfeedback<0)
+			  {
+				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,abs(Vfeedback)*3);
+				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,0);
+			  }
+			  else
+			  {
+				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,0);
+				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,0);
+			  }
+	  	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
